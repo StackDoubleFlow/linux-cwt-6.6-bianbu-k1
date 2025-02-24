@@ -1,0 +1,26 @@
+From b34cd264e5df518442cb6392f6b722d9142531ac Mon Sep 17 00:00:00 2001
+From: Icenowy Zheng <uwu@icenowy.me>
+Date: Sun, 7 Jul 2024 16:33:21 +0800
+Subject: [PATCH] very dirty hack to allocate memory for new AMD cards
+
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+---
+ drivers/pci/setup-bus.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/pci/setup-bus.c b/drivers/pci/setup-bus.c
+index dae490f25..c099d307a 100644
+--- a/drivers/pci/setup-bus.c
++++ b/drivers/pci/setup-bus.c
+@@ -1069,6 +1069,8 @@ static int pbus_size_mem(struct pci_bus *bus, unsigned long mask,
+ 	min_align = calculate_mem_align(aligns, max_order);
+ 	min_align = max(min_align, window_alignment(bus, b_res->flags));
+ 	size0 = calculate_memsize(size, min_size, 0, 0, resource_size(b_res), min_align);
++	if (size0 == 0x18000000U)
++		size0 = 0x16000000U;
+ 	add_align = max(min_align, add_align);
+ 	size1 = (!realloc_head || (realloc_head && !add_size && !children_add_size)) ? size0 :
+ 		calculate_memsize(size, min_size, add_size, children_add_size,
+-- 
+Gitee
+

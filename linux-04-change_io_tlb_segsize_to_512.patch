@@ -1,0 +1,22 @@
+From d584607208532f3177e30b8d952557db7bb1152c Mon Sep 17 00:00:00 2001
+From: StackDoubleFlow <ojaslandge@gmail.com>
+Date: Sun, 27 Oct 2024 03:00:07 -0400
+Subject: [PATCH] Change IO_TLB_SEGSIZE to 512
+
+---
+ include/linux/swiotlb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+index 2e8fd5f61..f0702e10a 100644
+--- a/include/linux/swiotlb.h
++++ b/include/linux/swiotlb.h
+@@ -24,7 +24,7 @@ struct scatterlist;
+  * The complexity of {map,unmap}_single is linearly dependent on this value.
+  */
+ #if defined(CONFIG_SOC_SPACEMIT_K1X)
+-#define IO_TLB_SEGSIZE	256
++#define IO_TLB_SEGSIZE	512
+ #else
+ #define IO_TLB_SEGSIZE	128
+ #endif

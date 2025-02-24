@@ -1,0 +1,134 @@
+From f04e590a0cdf7fef1f37f079223759e1774fc24f Mon Sep 17 00:00:00 2001
+From: StackDoubleFlow <ojaslandge@gmail.com>
+Date: Sun, 23 Feb 2025 08:57:29 -0500
+Subject: [PATCH] radeon/amdgpu: force 32-bit dma
+
+---
+ drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c  | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c  | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c  | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c  | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
+index 62ecf4d89cb9..48e6002d63ac 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
+@@ -965,13 +965,13 @@ static int gmc_v10_0_sw_init(void *handle)
+ 	 */
+ 	adev->gmc.mc_mask = 0xffffffffffffULL; /* 48 bit MC */
+ 
+-	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(44));
++	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(32));
+ 	if (r) {
+ 		dev_warn(adev->dev, "amdgpu: No suitable DMA available.\n");
+ 		return r;
+ 	}
+ 
+-	adev->need_swiotlb = drm_need_swiotlb(44);
++	adev->need_swiotlb = drm_need_swiotlb(32);
+ 
+ 	r = gmc_v10_0_mc_init(adev);
+ 	if (r)
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c
+index 3d797a1adef3..f70d44801a6d 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c
+@@ -822,13 +822,13 @@ static int gmc_v11_0_sw_init(void *handle)
+ 	 */
+ 	adev->gmc.mc_mask = 0xffffffffffffULL; /* 48 bit MC */
+ 
+-	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(44));
++	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(32));
+ 	if (r) {
+ 		dev_warn(adev->dev, "amdgpu: No suitable DMA available.\n");
+ 		return r;
+ 	}
+ 
+-	adev->need_swiotlb = drm_need_swiotlb(44);
++	adev->need_swiotlb = drm_need_swiotlb(32);
+ 
+ 	r = gmc_v11_0_mc_init(adev);
+ 	if (r)
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c
+index dfee4aae8039..673c4ceadcf4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c
+@@ -831,12 +831,12 @@ static int gmc_v6_0_sw_init(void *handle)
+ 
+ 	adev->gmc.mc_mask = 0xffffffffffULL;
+ 
+-	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(40));
++	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(32));
+ 	if (r) {
+ 		dev_warn(adev->dev, "No suitable DMA available.\n");
+ 		return r;
+ 	}
+-	adev->need_swiotlb = drm_need_swiotlb(40);
++	adev->need_swiotlb = drm_need_swiotlb(32);
+ 
+ 	r = gmc_v6_0_init_microcode(adev);
+ 	if (r) {
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
+index fd905889a4c6..f35935380364 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
+@@ -1010,12 +1010,12 @@ static int gmc_v7_0_sw_init(void *handle)
+ 	 */
+ 	adev->gmc.mc_mask = 0xffffffffffULL; /* 40 bit MC */
+ 
+-	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(40));
++	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(32));
+ 	if (r) {
+ 		pr_warn("No suitable DMA available\n");
+ 		return r;
+ 	}
+-	adev->need_swiotlb = drm_need_swiotlb(40);
++	adev->need_swiotlb = drm_need_swiotlb(32);
+ 
+ 	r = gmc_v7_0_init_microcode(adev);
+ 	if (r) {
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+index 0bebcdbb2658..20962715c8c1 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+@@ -1123,12 +1123,12 @@ static int gmc_v8_0_sw_init(void *handle)
+ 	 */
+ 	adev->gmc.mc_mask = 0xffffffffffULL; /* 40 bit MC */
+ 
+-	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(40));
++	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(32));
+ 	if (r) {
+ 		pr_warn("No suitable DMA available\n");
+ 		return r;
+ 	}
+-	adev->need_swiotlb = drm_need_swiotlb(40);
++	adev->need_swiotlb = drm_need_swiotlb(32);
+ 
+ 	r = gmc_v8_0_init_microcode(adev);
+ 	if (r) {
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+index 6d2b9d260d92..95303b0ca0fd 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+@@ -2157,12 +2157,12 @@ static int gmc_v9_0_sw_init(void *handle)
+ 	adev->gmc.mc_mask = 0xffffffffffffULL; /* 48 bit MC */
+ 
+ 	dma_addr_bits = adev->ip_versions[GC_HWIP][0] >= IP_VERSION(9, 4, 2) ? 48:44;
+-	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(dma_addr_bits));
++	r = dma_set_mask_and_coherent(adev->dev, DMA_BIT_MASK(32));
+ 	if (r) {
+ 		dev_warn(adev->dev, "amdgpu: No suitable DMA available.\n");
+ 		return r;
+ 	}
+-	adev->need_swiotlb = drm_need_swiotlb(dma_addr_bits);
++	adev->need_swiotlb = drm_need_swiotlb(32);
+ 
+ 	r = gmc_v9_0_mc_init(adev);
+ 	if (r)
+-- 
+2.48.1
+
+
